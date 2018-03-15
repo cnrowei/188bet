@@ -15,9 +15,9 @@ import (
 	//"188bet/models"
 )
 
-func main(){
-	CentraServicePost()
-}
+// func main(){
+// 	CentraServicePost()
+// }
 
 
 // func main(){
@@ -52,6 +52,7 @@ func CentraServicePost(){
 	postValues.Add("VersionF","-1")
 	postValues.Add("VersionH","1:0,2:0,3:0,9:0,13:0,18:0,21:0,23:0")
 	postValues.Add("VersionT","-1")
+	
 	postValues.Add("IsEventMenu","false")
 	postValues.Add("SportID","1")
 	postValues.Add("CompetitionID","-1")

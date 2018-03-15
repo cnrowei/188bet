@@ -10,6 +10,7 @@ import (
 	//"github.com/gin-gonic/gin/binding"
 	"net/http"
 	"188bet/models"
+
 )
 
 
@@ -68,7 +69,8 @@ func main() {
 		})
 	})
 
-	
+	CentraServicePost()
+
 
 	router.Run(":8000")
 
