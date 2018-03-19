@@ -1,0 +1,567 @@
+{var ssc = oddsUtil.ShowSportContainer(c, isMyEvents);} {var isSportsEventAreToggedToMyEvent = oddsUtil.isSportsEventAreToggedToMyEvent(c);}
+<div class="sport-container tennis {if !ssc} hidden{/if}" id="s${k}">
+    <h2 class="sport-title">
+        <div class="tableContainer">
+            <table class="width-100p height-39">
+                <colgroup>
+                    <col>
+                    <col class="col-fixedRight"> </colgroup>
+                <tbody>
+                    <tr>
+                        <td class="lht-0p7">
+                            <div class="sportName uppercase">
+                                <div class="icon-${k}"></div>${n}</div>
+                        </td>
+                        <td>
+                            <div class="Sets showOptionFinal" id="sets" title="{if k==9 || k==20}${l.OP_ViewTheGameBettingMarket}{else}${l.OP_ViewTheSetMarket}{/if}"
+                                data-tpa="left">{if k==9 || k==20}${l.Results_Games}{else}${l.Period_Sets}{/if}</div>
+                            <span class="show">显示</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </h2> {if isMyEvents == false}
+    <div id="sportEmptyMsg" class="bg-c-1 fts-13 ft-c-22 pd-t-10 pd-b-10 pd-l-10 pd-r-10 {if isSportsEventAreToggedToMyEvent == false} hidden {/if}">
+    ${l.AllEventsTaggedToMyEvents.replace('[sportname]', n)} </div> {/if} {for comp in c} {var evtIds = oddsUtil.GetEventIds(isMyEvents?
+    comp.me : comp.e);}
+    <div class="cp-container {if evtIds.length == 0} hidden{/if}" id="cp${comp.k}-${comp_index}">
+        <h3 class="competitionName expand{if isMyEvents} hidden{/if}" id="ct${comp.k}-${comp_index}">
+            <table class="headerTb width-100p">
+                <colgroup>
+                    <col>
+                    <col class="col-fixed55">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td class="fts-15 ft-c-27 lht-14 pd-r-10 pd-l-10 cpn">${comp.n}</td>
+                        <td class="t-a-r pd-r-10 cpn">
+                            <span class="myFavorite {if isMyEvents} actived{/if}">
+                                <span class="dsp-iblk icon-fav-thin ft-c-28 fvc" data-meinfo="s${k}_cp${comp.k}-${comp_index}"
+                                    {if isMyEvents} title="${l.OP_RemoveAllMyEvents}" {else} title="${l.OP_AddAllMyEvents}" {/if}></span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </h3>
+        <div class="event-container ec" id="c${comp.k}-${comp_index}"> {var events = isMyEvents ? comp.me : comp.e} {for event in events} {var odds = event.o;} {var haveChildEvent = event.cel.length
+            > 0;} {if (odds || haveChildEvent)} {var ids = event.i[38] && event.i[38] == "True" && event.sb != null;} {var
+            sb = event.sb;} {var ps = sb ? sb.ps : null;} {var et = event.i[37];} {var isHomeFav = null; var isAwayFav =
+            null;} {var isNeutral = (event.g == "N");} {var pId = event.cei.ctid == 0 ? event.k : event.pk;} {if odds} {if
+            odds.ah} {var isHomeFav = oddsUtil.isFavouriteTeam(odds.ah, 1, true);var isAwayFav = oddsUtil.isFavouriteTeam(odds.ah,
+            1, false);} {var isAHHFav = isHomeFav ? true : false;} {var isAHAFav = isAwayFav ? true : false;} {/if} {if odds.ahfts}
+            {var isGameHFav = oddsUtil.isFavouriteTeam(odds.ahfts, 1, true);var isGameAFav = oddsUtil.isFavouriteTeam(odds.ahfts,
+            1, false);} {/if} {if odds.ahpt} {var isPointHFav = oddsUtil.isFavouriteTeam(odds.ahpt, 1, true);var isPointAFav
+            = oddsUtil.isFavouriteTeam(odds.ahpt, 1, false);} {/if} {/if}
+            <div class="event" id="e${event.k}" pid="${pId}"
+                data-odr="${event.odr}"> {if event.cei.ctid == 0}
+                <input type="hidden" id="en${event.pk}" value="${event.i[36]}" /> {/if}
+                <table class="eventTable">
+                    <colgroup>
+                        <col class="cg-score">
+                        <col class="cg-teameName">
+                        <col class="cg-moreBetRedCard">
+                        <col class="cg-odds-wn">
+                        <col class="cg-odds-blank">
+                        <col class="cg-odds-hdp">
+                        <col class="cg-odds-hdp-odds">
+                        <col class="cg-odds-blank">
+                        <col class="cg-odds-ghdp">
+                        <col class="cg-odds-ghdp-odds">
+                        <col class="cg-odds-blank">
+                        <col class="cg-odds-gOu">
+                        <col class="cg-odds-gOu-odds">
+                        <col class="cg-otherInfo"> </colgroup>
+                    <thead>
+                        <tr class="topPart">
+                            <th class="th-score" colspan="2" rowspan="2"> {if et == "0"}
+                                <span class="ft-c-14 live dsp-iblk mg-r-6">LIVE</span> {else} {var bestOf = oddsUtil.GetBestOfLocalization(et);}
+                                <span class="period">${bestOf}</span> {/if} {if isNeutral}
+                                <span title="${l.neut}">
+                                    <span class="neutral">
+                                        <span class="icon-Neutralbg"></span>
+                                        <span class="icon-NeutralN"></span>
+                                    </span>
+                                </span> {/if} </th> {if event.i[32] != "0"}
+                            <th class="th-moreBetRedCard amkt" rowspan="2" id="am${event.k}">
+                                <span class="moreBet" title="${l.OP_ViewAllMarkets}">
+                                    <span id="mb${event.k}">${event.i[32]}</span>
+                                    <span class="icon-ArrowMoreBets"></span>
+                                </span>
+                                <span class="tick"></span>
+                            </th> {/if}
+                            <th class="th-odds-wn">${l.Odds_Winner}</th>
+                            <th class="th-odds-hdp"></th>
+                            <th class="th-odds-hdp"> {if k == 9 || k == 20} ${l.Odds_GameHDP} {else} ${l.MB_SetHDC} {/if} </th>
+                            <th class="th-odds-ghdp"></th>
+                            <th class="th-odds-ghdp"> {if k == 3} ${l.Odds_GameHDP} {else} ${l.MB_PointHDC} {/if} </th>
+                            <th class="th-odds-gOu"></th>
+                            <th class="th-odds-gOu"> {if k == 3} ${l.Odds_GameOU} {else} ${l.MB_PointsOU} {/if} </th>
+                            <th class="th-otherInfo" rowspan="2">
+                                <div class="myFavorite {if isMyEvents} actived{/if}">
+                                    <div class="icon-fav-thin fve" data-meinfo="s${k}_cp${comp.k}-${comp_index}_${pId}" {if isMyEvents}
+                                        title="${l.OP_RemoveMyEvents}" {else} title="${l.OP_AddMyEvents}" {/if}></div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="selectionHover" data-amkt="am${event.k}">
+                        <tr class="{if isHomeFav} fav{/if}"> {if ids}
+                            <td class="td-score amkt h-amkt">
+                                <span id="ph${event.k}">{if sb}${oddsUtil.GetCurrentScore(ps, sb.cp, k, true)}{/if}</span>
+                                <span class="{if sb && sb.s == 1}serve{/if} ball"
+                                    id="svh${event.k}"></span>
+                            </td> {/if}
+                            <td class="td-teameName amkt h-amkt {if !ids} pd-l-12{/if}" {if !ids} colspan="3" {else}
+                                colspan="2" {/if} id="ht${event.k}">${event.i[0]}</td>
+                            <td class="td-odds-wn"> {if odds} {if odds.ml != null && odds.ml[1]} {if odds.ml[1] == '0.00'} ${oddsUtil.getLockIcon(true)}
+                                {else}
+                                <span class="odds" id="${odds.ml[0]}" title="${event.i[0]}">${odds.ml[1]}</span> {/if} {/if} {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"> {if odds} {if odds.ah != null && odds.ah[5] && odds.ah[1]} {if odds.ah[5] != '0.00'} {var isHideHDP
+                                = isAHAFav && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds.ah[0]}" hdp="${odds.ah[1]}">{if isEuroOddsType}${odds.ah[1]}{else}${odds.ah[1].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} {/if} </td>
+                            <td class="td-odds-hdp-odds"> {if odds} {if odds.ah != null && odds.ah[5] && odds.ah[1]}
+                                <div class="OddsWrapper"> {if odds.ah[5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isAHAFav
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if odds.ah[5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds.ah[0]}" hdp="${odds.ah[1]}">{if isEuroOddsType}${odds.ah[1]}{else}${odds.ah[1].replace("-","")}{/if}</span>
+                                        <span
+                                            class="netOdds" id="${odds.ah[4]}">${odds.ah[5]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td> {var ahOdds = null;} {var isFavTeam = false;} {if odds} {if odds.ahfts != null} {var ahOdds
+                            = odds.ahfts;} {var isFavTeam = isGameAFav;} {elseif odds.ahpt != null} {var ahOdds = odds.ahpt;}
+                            {var isFavTeam = isPointAFav;} {/if} {/if}
+                            <td class="td-odds-ghdp"> {if odds} {if ahOdds != null && ahOdds[5] && ahOdds[1]} {if ahOdds[5] != '0.00'} {var isHideHDP
+                                = isFavTeam && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${ahOdds[0]}" hdp="${ahOdds[1]}">{if isEuroOddsType}${ahOdds[1]}{else}${ahOdds[1].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds} {if ahOdds != null && ahOdds[5] && ahOdds[1]}
+                                <div class="OddsWrapper"> {if ahOdds[5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isFavTeam
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if ahOdds[5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${ahOdds[0]}" hdp="${ahOdds[1]}">{if isEuroOddsType}${ahOdds[1]}{else}${ahOdds[1].replace("-","")}{/if}</span>
+                                        <span
+                                            class="netOdds" id="${ahOdds[4]}">${ahOdds[5]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td> {var ouOdds = null;} {if odds} {if odds.oufts != null} {var ouOdds = odds.oufts;} {elseif
+                            odds.oupt != null} {var ouOdds = odds.oupt;} {/if} {/if}
+                            <td class="td-odds-gOu"> {if odds} {if ouOdds != null && ouOdds[5] && ouOdds[1]} {if ouOdds[5] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="O">${l.so}</span>
+                                    <span class="handicap" id="${ouOdds[0]}" hdp="${ouOdds[1]}">${ouOdds[1]}</span>
+                                </span> {/if} {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds} {if ouOdds != null && ouOdds[5] && ouOdds[1]}
+                                <div class="OddsWrapper"> {if ouOdds[5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if ouOdds[5] < 0} negOdds{/if}"
+                                        title="大">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="O">${l.so}</span>
+                                            <span class="handicap" id="${ouOdds[0]}" hdp="${ouOdds[1]}">${ouOdds[1]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${ouOdds[4]}">${ouOdds[5]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                            <td class="td-otherInfo" rowspan="2"> {if event.i[7] != ""}
+                                <div class="icon-TV2 orange tvip {if event.ibs} bgs{/if} btn-tv-ip" url="/zh-cn/live-streaming/${event.pk}"
+                                    id="lt${event.k}" title="${utility.replaceTooltipBu(l.LP_LiveStreamInplay)}" data-tpa="left"
+                                    cc-info="${event.pk}|${event.i[0]}|${event.i[1]}|${k}|${event.i[7]}|${event.pvdr}"></div> {/if} {if event.i[7] == "" && event.ibs && event.ibsc}
+                                <div class="icon-Pitch fts-15 green bg btn-livematch-ip"
+                                    title="${l.OP_188LiveMatchViewAvailable}" data-tpa="left" cc-info="${event.pk}|${event.i[0]}|${event.i[1]}|${k}|${event.i[7]}|${event.pvdr}|${event.ibs}|${event.ibsc}"></div> {/if} {if global.showStatistics == true}
+                                <div class="icon-Stats" url="/zh-cn/info-centre/sportsbook-info/statistics/${event.k}"
+                                    target="_blank" title="数据统计" data-tpa="left"></div> {/if} </td>
+                        </tr>
+                        <tr class="{if isAwayFav} fav{/if}"> {if ids}
+                            <td class="td-score amkt h-amkt">
+                                <span id="pa${event.k}">{if sb}${oddsUtil.GetCurrentScore(ps, sb.cp, k, false)}{/if}</span>
+                                <span class="{if sb && sb.s == 0}serve{/if} ball"
+                                    id="sva${event.k}"></span>
+                            </td> {/if}
+                            <td class="td-teameName amkt h-amkt {if !ids} pd-l-12{/if}" {if !ids} colspan="3" {else}
+                                colspan="2" {/if} id="at${event.k}">${event.i[1]}</td>
+                            <td class="td-odds-wn"> {if odds} {if odds.ml != null && odds.ml[3]} {if odds.ml[3] == '0.00'} ${oddsUtil.getLockIcon(true)}
+                                {else}
+                                <span class="odds" id="${odds.ml[2]}" title="${event.i[1]}">${odds.ml[3]}</span> {/if} {/if} {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"> {if odds} {if odds.ah != null && odds.ah[7] && odds.ah[3]} {if odds.ah[7] != '0.00'} {var isHideHDP
+                                = (isAHHFav || odds.ah[3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds.ah[2]}" hdp="${odds.ah[3]}">{if isEuroOddsType}${odds.ah[3]}{else}${odds.ah[3].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} {/if} </td>
+                            <td class="td-odds-hdp-odds"> {if odds} {if odds.ah != null && odds.ah[7] && odds.ah[3]}
+                                <div class="OddsWrapper"> {if odds.ah[7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isAHHFav
+                                    || odds.ah[3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if odds.ah[7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds.ah[2]}" hdp="${odds.ah[3]}">{if isEuroOddsType}${odds.ah[3]}{else}${odds.ah[3].replace("-","")}{/if}</span>
+                                        <span
+                                            class="netOdds" id="${odds.ah[6]}">${odds.ah[7]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td> {var ahOdds = null;} {var isFavTeam = false;} {if odds} {if odds.ahfts != null} {var ahOdds
+                            = odds.ahfts;} {var isFavTeam = isGameHFav;} {elseif odds.ahpt != null} {var ahOdds = odds.ahpt;}
+                            {var isFavTeam = isPointHFav;} {/if} {/if}
+                            <td class="td-odds-ghdp"> {if odds} {if ahOdds != null && ahOdds[7] && ahOdds[3]} {if ahOdds[7] != '0.00'} {var isHideHDP
+                                = (isFavTeam || ahOdds[3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${ahOdds[2]}" hdp="${ahOdds[3]}">{if isEuroOddsType}${ahOdds[3]}{else}${ahOdds[3].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds} {if ahOdds != null && ahOdds[7] && ahOdds[3]}
+                                <div class="OddsWrapper"> {if ahOdds[7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isFavTeam
+                                    || ahOdds[3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if ahOdds[7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${ahOdds[2]}" hdp="${ahOdds[3]}">{if isEuroOddsType}${ahOdds[3]}{else}${ahOdds[3].replace("-","")}{/if}</span>
+                                        <span
+                                            class="netOdds" id="${ahOdds[6]}">${ahOdds[7]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td> {var ouOdds = null;} {if odds} {if odds.oufts != null} {var ouOdds = odds.oufts;} {elseif
+                            odds.oupt != null} {var ouOdds = odds.oupt;} {/if} {/if}
+                            <td class="td-odds-gOu"> {if odds} {if ouOdds != null && ouOdds[7] && ouOdds[3]} {if ouOdds[7] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="U">${l.su}</span>
+                                    <span class="handicap" id="${ouOdds[2]}" hdp="${ouOdds[3]}">${ouOdds[3]}</span>
+                                </span> {/if} {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds} {if ouOdds != null && ouOdds[7] && ouOdds[3]}
+                                <div class="OddsWrapper"> {if ouOdds[7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if ouOdds[7] < 0} negOdds{/if}"
+                                        title="小">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="U">${l.su}</span>
+                                            <span class="handicap" id="${ouOdds[2]}" hdp="${ouOdds[3]}">${ouOdds[3]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${ouOdds[6]}">${ouOdds[7]}</span>
+                                    </span> {/if} </div> {/if} {/if} </td>
+                        </tr>
+                    </tbody> {if uv.nol == 1 && odds && ($(odds.ah).size() > 8 || $(odds.ou).size() > 8 || $(odds.ahfts).size() >
+                    8 || $(odds.oufts).size() > 8 || $(odds.ahpt).size() > 8 || $(odds.oupt).size() > 8)} {var max = $(odds.ah).size();}
+                    {var o = odds.ah;} {if $(odds.ou).size() > max} {var max = $(odds.ou).size();} {var o = odds.ou;} {/if}
+                    {if $(odds.ahfts).size() > max} {var max = $(odds.ahfts).size();} {var o = odds.ahfts;} {/if} {if $(odds.oufts).size()
+                    > max} {var max = $(odds.oufts).size();} {var o = odds.oufts;} {/if} {if $(odds.ahpt).size() > max} {var
+                    max = $(odds.ahpt).size();} {var o = odds.ahpt;} {/if} {if $(odds.oupt).size() > max} {var max = $(odds.oupt).size();}
+                    {var o = odds.oupt;} {/if} {var j = 0;} {for i in o} {if i_index % 8 == 0 && i_index > 0 } {var lvl =
+                    (i_index / 8) + 1;} {var isHomeFav = null; var isAwayFav = null;} {if odds.ah && $(odds.ah).size() >
+                    8} {var isHomeFav = oddsUtil.isFavouriteTeam(odds.ah, lvl, true);var isAwayFav = oddsUtil.isFavouriteTeam(odds.ah,
+                    lvl, false);} {var isAHHFav = isHomeFav ? true : false;} {var isAHAFav = isAwayFav ? true : false;} {/if}
+                    {if odds.ahfts && $(odds.ahfts).size() > 8} {var isGameHFav = oddsUtil.isFavouriteTeam(odds.ahfts, lvl,
+                    true);var isGameAFav = oddsUtil.isFavouriteTeam(odds.ahfts, lvl, false);} {/if} {if odds.ahpt && $(odds.ahpt).size()
+                    > 8} {var isPointHFav = oddsUtil.isFavouriteTeam(odds.ahpt, lvl, true);var isPointAFav = oddsUtil.isFavouriteTeam(odds.ahpt,
+                    lvl, false);} {/if} {var j = j + 8;}
+                    <tbody class="selectionHover" data-amkt="am${event.k}">
+                        <tr class="{if isHomeFav} fav{/if}"> {if ids}
+                            <td class="td-score amkt h-amkt"></td> {/if}
+                            <td class="td-teameName amkt h-amkt {if !ids} pd-l-12{/if}" {if !ids} colspan="3"
+                                {else} colspan="2" {/if} id="ht${event.k}">${event.i[0]}</td>
+                            <td class="td-odds-wn"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"> {if odds.ah != null && odds.ah[j+5] && odds.ah[j+1]} {if odds.ah[j+5] != '0.00'} {var isHideHDP
+                                = isAHAFav && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds.ah[j+0]}" hdp="${odds.ah[j+1]}">{if isEuroOddsType}${odds.ah[j+1]}{else}${odds.ah[j+1].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} </td>
+                            <td class="td-odds-hdp-odds"> {if odds.ah != null && odds.ah[j+5] && odds.ah[j+1]}
+                                <div class="OddsWrapper"> {if odds.ah[j+5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isAHAFav
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if odds.ah[j+5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds.ah[j+0]}" hdp="${odds.ah[j+1]}">{if isEuroOddsType}${odds.ah[j+1]}{else}${odds.ah[j+1].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds.ah[j+4]}">${odds.ah[j+5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td> {var ahOdds = null;} {var isFavTeam = false;} {if odds.ahfts != null} {var ahOdds = odds.ahfts;}
+                            {var isFavTeam = isGameAFav;} {elseif odds.ahpt != null} {var ahOdds = odds.ahpt;} {var isFavTeam
+                            = isPointAFav;} {/if}
+                            <td class="td-odds-ghdp"> {if ahOdds != null && ahOdds[j+5] && ahOdds[j+1]} {if ahOdds[j+5] != '0.00'} {var isHideHDP =
+                                isFavTeam && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${ahOdds[j+0]}" hdp="${ahOdds[j+1]}">{if isEuroOddsType}${ahOdds[j+1]}{else}${ahOdds[j+1].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if ahOdds != null && ahOdds[j+5] && ahOdds[j+1]}
+                                <div class="OddsWrapper"> {if ahOdds[j+5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isFavTeam
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if ahOdds[j+5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${ahOdds[j+0]}" hdp="${ahOdds[j+1]}">{if isEuroOddsType}${ahOdds[j+1]}{else}${ahOdds[j+1].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${ahOdds[j+4]}">${ahOdds[j+5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td> {var ouOdds = null;} {if odds.oufts != null} {var ouOdds = odds.oufts;} {elseif odds.oupt
+                            != null} {var ouOdds = odds.oupt;} {/if}
+                            <td class="td-odds-gOu"> {if ouOdds != null && ouOdds[j+5] && ouOdds[j+1]} {if ouOdds[j+5] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="O">${l.so}</span>
+                                    <span class="handicap" id="${ouOdds[j+0]}" hdp="${ouOdds[j+1]}">${ouOdds[j+1]}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if ouOdds != null && ouOdds[j+5] && ouOdds[j+1]}
+                                <div class="OddsWrapper"> {if ouOdds[j+5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if ouOdds[j+5] < 0} negOdds{/if}"
+                                        title="大">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="O">${l.so}</span>
+                                            <span class="handicap" id="${ouOdds[j+0]}" hdp="${ouOdds[j+1]}">${ouOdds[j+1]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${ouOdds[j+4]}">${ouOdds[j+5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-otherInfo" rowspan="2"></td>
+                        </tr>
+                        <tr class="{if isAwayFav} fav{/if}"> {if ids}
+                            <td class="td-score amkt h-amkt"></td> {/if}
+                            <td class="td-teameName amkt h-amkt {if !ids} pd-l-12{/if}" {if !ids} colspan="3"
+                                {else} colspan="2" {/if} id="at${event.k}">${event.i[1]}</td>
+                            <td class="td-odds-wn"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"> {if odds.ah != null && odds.ah[j+7] && odds.ah[j+3]} {if odds.ah[j+7] != '0.00'} {var isHideHDP
+                                = (isAHHFav || odds.ah[j+3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds.ah[j+2]}" hdp="${odds.ah[j+3]}">{if isEuroOddsType}${odds.ah[j+3]}{else}${odds.ah[j+3].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} </td>
+                            <td class="td-odds-hdp-odds"> {if odds.ah != null && odds.ah[j+7] && odds.ah[j+3]}
+                                <div class="OddsWrapper"> {if odds.ah[j+7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isAHHFav
+                                    || odds.ah[j+3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if odds.ah[j+7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds.ah[j+2]}" hdp="${odds.ah[j+3]}">{if isEuroOddsType}${odds.ah[j+3]}{else}${odds.ah[j+3].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds.ah[j+6]}">${odds.ah[j+7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td> {var ahOdds = null;} {var isFavTeam = false;} {if odds.ahfts != null} {var ahOdds = odds.ahfts;}
+                            {var isFavTeam = isGameHFav;} {elseif odds.ahpt != null} {var ahOdds = odds.ahpt;} {var isFavTeam
+                            = isPointHFav;} {/if}
+                            <td class="td-odds-ghdp"> {if ahOdds != null && ahOdds[j+7] && ahOdds[j+3]} {if ahOdds[j+7] != '0.00'} {var isHideHDP =
+                                (isFavTeam || ahOdds[j+3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${ahOdds[j+2]}" hdp="${ahOdds[j+3]}">{if isEuroOddsType}${ahOdds[j+3]}{else}${ahOdds[j+3].replace("-","")}{/if}</span>
+                                </span>
+                                {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if ahOdds != null && ahOdds[j+7] && ahOdds[j+3]}
+                                <div class="OddsWrapper"> {if ahOdds[j+7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isFavTeam
+                                    || ahOdds[j+3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if ahOdds[j+7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${ahOdds[j+2]}" hdp="${ahOdds[j+3]}">{if isEuroOddsType}${ahOdds[j+3]}{else}${ahOdds[j+3].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${ahOdds[j+6]}">${ahOdds[j+7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td> {var ouOdds = null;} {if odds.oufts != null} {var ouOdds = odds.oufts;} {elseif odds.oupt
+                            != null} {var ouOdds = odds.oupt;} {/if}
+                            <td class="td-odds-gOu"> {if ouOdds != null && ouOdds[j+7] && ouOdds[j+3]} {if ouOdds[j+7] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="U">${l.su}</span>
+                                    <span class="handicap" id="${ouOdds[j+2]}" hdp="${ouOdds[j+3]}">${ouOdds[j+3]}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if ouOdds != null && ouOdds[j+7] && ouOdds[j+3]}
+                                <div class="OddsWrapper"> {if ouOdds[j+7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if ouOdds[j+7] < 0} negOdds{/if}"
+                                        title="小">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="U">${l.su}</span>
+                                            <span class="handicap" id="${ouOdds[j+2]}" hdp="${ouOdds[j+3]}">${ouOdds[j+3]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${ouOdds[j+6]}">${ouOdds[j+7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                        </tr>
+                    </tbody> {/if} {/for} {/if} {var periodTypes = event.pts;} {if $(periodTypes).size() > 0} {for p in periodTypes}
+                    {var pt = "";} {for ss in p} {if ss!="-"} {var pt = ss;} {/if} {/for} {if pt != null && pt.length > 0
+                    } {var pType = pt.substr((pt.indexOf("1x2") == -1 ? 2 : 3));} {if pType != "fts" && pType != "pt"} {if
+                    odds[p[0]] != null || odds[p[1]] != null || odds[p[2]] != null} {var pText = oddsUtil.GetPeriodText(pType,
+                    k);} {var pTitile = oddsUtil.GetPeriodLocalization(pType, k);} {var isHomeFav = oddsUtil.isFavouriteTeam(odds[p[1]],
+                    1, true);var isAwayFav = oddsUtil.isFavouriteTeam(odds[p[1]], 1, false);}
+                    <tbody class="${oddsUtil.GetPeriodClass(pType)} selectionHover"
+                        data-amkt="am${event.k}">
+                        <tr class="{if isHomeFav} fav{/if}">
+                            <td class="td-score amkt h-amkt borderBottom" rowspan="2">
+                                <span class="quarterGreen" {if pTitile.length> 0 } title="${pTitile}" data-tpa="right"{/if}>
+                                    <span>${pText}</span>
+                                </span>
+                            </td>
+                            <td class="td-teameName amkt h-amkt" colspan="2" id="ht${event.k}">${event.i[0]}</td>
+                            <td class="td-odds-wn"> {if odds[p[0]] != null && odds[p[0]][1]} {if odds[p[0]][1] == '0.00'} ${oddsUtil.getLockIcon(true)}
+                                {else}
+                                <span class="odds" id="${odds[p[0]][0]}" title="${event.i[0]}">${odds[p[0]][1]}</span> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"></td>
+                            <td class="td-odds-hdp-odds"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-ghdp"> {if odds[p[1]] != null && odds[p[1]][5] && odds[p[1]][1]} {if odds[p[1]][5] != '0.00'} {var isHideHDP
+                                = isAwayFav && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds[p[1]][0]}" hdp="${odds[p[1]][1]}">{if isEuroOddsType}${odds[p[1]][1]}{else}${odds[p[1]][1].replace("-","")}{/if}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds[p[1]] != null && odds[p[1]][5] && odds[p[1]][1]}
+                                <div class="OddsWrapper"> {if odds[p[1]][5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isAwayFav
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if odds[p[1]][5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds[p[1]][0]}" hdp="${odds[p[1]][1]}">{if isEuroOddsType}${odds[p[1]][1]}{else}${odds[p[1]][1].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds[p[1]][4]}">${odds[p[1]][5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-gOu"> {if odds[p[2]] != null && odds[p[2]][5] && odds[p[2]][1]} {if odds[p[2]][5] != '0.00'}
+                                <span
+                                    class="odds-otherInfo">
+                                    <span class="ou" ou="O">${l.so}</span>
+                                    <span class="handicap" id="${odds[p[2]][0]}" hdp="${odds[p[2]][1]}">${odds[p[2]][1]}</span>
+                                    </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds[p[2]] != null && odds[p[2]][5] && odds[p[2]][1]}
+                                <div class="OddsWrapper"> {if odds[p[2]][5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if odds[p[2]][5] < 0} negOdds{/if}"
+                                        title="大">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="O">${l.so}</span>
+                                            <span class="handicap" id="${odds[p[2]][0]}" hdp="${odds[p[2]][1]}">${odds[p[2]][1]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${odds[p[2]][4]}">${odds[p[2]][5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-otherInfo" rowspan="2"></td>
+                        </tr>
+                        <tr class="{if isAwayFav} fav{/if}">
+                            <td class="td-teameName amkt h-amkt" colspan="2" id="at${event.k}">${event.i[1]}</td>
+                            <td class="td-odds-wn"> {if odds[p[0]] != null && odds[p[0]][3]} {if odds[p[0]][3] == '0.00'} ${oddsUtil.getLockIcon(true)}
+                                {else}
+                                <span class="odds" id="${odds[p[0]][2]}" title="${event.i[1]}">${odds[p[0]][3]}</span> {/if} {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"></td>
+                            <td class="td-odds-hdp-odds"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-ghdp"> {if odds[p[1]] != null && odds[p[1]][7] && odds[p[1]][3]} {if odds[p[1]][7] != '0.00'} {var isHideHDP
+                                = (isHomeFav || odds[p[1]][3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds[p[1]][2]}" hdp="${odds[p[1]][3]}">{if isEuroOddsType}${odds[p[1]][3]}{else}${odds[p[1]][3].replace("-","")}{/if}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds[p[1]] != null && odds[p[1]][7] && odds[p[1]][3]}
+                                <div class="OddsWrapper"> {if odds[p[1]][7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isHomeFav
+                                    || odds[p[1]][3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if odds[p[1]][7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds[p[1]][2]}" hdp="${odds[p[1]][3]}">{if isEuroOddsType}${odds[p[1]][3]}{else}${odds[p[1]][3].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds[p[1]][6]}">${odds[p[1]][7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-gOu"> {if odds[p[2]] != null && odds[p[2]][7] && odds[p[2]][3]} {if odds[p[2]][7] != '0.00'}
+                                <span
+                                    class="odds-otherInfo">
+                                    <span class="ou" ou="U">${l.su}</span>
+                                    <span class="handicap" id="${odds[p[2]][2]}" hdp="${odds[p[2]][3]}">${odds[p[2]][3]}</span>
+                                    </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds[p[2]] != null && odds[p[2]][7] && odds[p[2]][3]}
+                                <div class="OddsWrapper"> {if odds[p[2]][7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if odds[p[2]][7] < 0} negOdds{/if}"
+                                        title="小">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="U">${l.su}</span>
+                                            <span class="handicap" id="${odds[p[2]][2]}" hdp="${odds[p[2]][3]}">${odds[p[2]][3]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${odds[p[2]][6]}">${odds[p[2]][7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                        </tr>
+                    </tbody> {if uv.nol == 1 && ($(odds[p[1]]).size() > 8 || $(odds[p[2]]).size() > 8)} {var max = $(odds[p[1]]).size();}
+                    {var o = odds[p[1]];} {if $(odds[p[2]]).size() > max} {var max = $(odds[p[2]]).size();} {var o = odds[p[2]];}
+                    {/if} {var j = 0;} {for i in o} {if i_index % 8 == 0 && i_index > 0 } {var lvl = (i_index / 8) + 1;}
+                    {var isHomeFav = oddsUtil.isFavouriteTeam(odds[p[1]], lvl, true);var isAwayFav = oddsUtil.isFavouriteTeam(odds[p[1]],
+                    lvl, false);} {var j = j + 8;}
+                    <tbody class="${oddsUtil.GetPeriodClass(pType)} selectionHover" data-amkt="am${event.k}">
+                        <tr class="{if isHomeFav} fav{/if}">
+                            <td class="td-score amkt h-amkt borderBottom" rowspan="2">
+                                <span class="quarterGreen" {if pTitile.length> 0 } title="${pTitile}" data-tpa="right"{/if}>
+                                    <span>${pText}</span>
+                                </span>
+                            </td>
+                            <td class="td-teameName amkt h-amkt" colspan="2" id="ht${event.k}">${event.i[0]}</td>
+                            <td class="td-odds-wn"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"></td>
+                            <td class="td-odds-hdp-odds"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-ghdp"> {if odds[p[1]] != null && odds[p[1]][j+5] && odds[p[1]][j+1]} {if odds[p[1]][j+5] != '0.00'}
+                                {var isHideHDP = isAwayFav && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds[p[1]][j+0]}" hdp="${odds[p[1]][j+1]}">{if isEuroOddsType}${odds[p[1]][j+1]}{else}${odds[p[1]][j+1].replace("-","")}{/if}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds[p[1]] != null && odds[p[1]][j+5] && odds[p[1]][j+1]}
+                                <div class="OddsWrapper"> {if odds[p[1]][j+5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = isAwayFav
+                                    && !isEuroOddsType;}
+                                    <span class="odds net {if odds[p[1]][j+5] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[0]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds[p[1]][j+0]}" hdp="${odds[p[1]][j+1]}">{if isEuroOddsType}${odds[p[1]][j+1]}{else}${odds[p[1]][j+1].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds[p[1]][j+4]}">${odds[p[1]][j+5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-gOu"> {if odds[p[2]] != null && odds[p[2]][j+5] && odds[p[2]][j+1]} {if odds[p[2]][j+5] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="O">${l.so}</span>
+                                    <span class="handicap" id="${odds[p[2]][j+0]}" hdp="${odds[p[2]][j+1]}">${odds[p[2]][j+1]}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds[p[2]] != null && odds[p[2]][j+5] && odds[p[2]][j+1]}
+                                <div class="OddsWrapper"> {if odds[p[2]][j+5] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if odds[p[2]][j+5] < 0} negOdds{/if}"
+                                        title="大">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="O">${l.so}</span>
+                                            <span class="handicap" id="${odds[p[2]][j+0]}" hdp="${odds[p[2]][j+1]}">${odds[p[2]][j+1]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${odds[p[2]][j+4]}">${odds[p[2]][j+5]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-otherInfo" rowspan="2"></td>
+                        </tr>
+                        <tr class="{if isAwayFav} fav{/if}">
+                            <td class="td-teameName amkt h-amkt" colspan="2" id="at${event.k}">${event.i[1]}</td>
+                            <td class="td-odds-wn"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-hdp"></td>
+                            <td class="td-odds-hdp-odds"></td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-ghdp"> {if odds[p[1]] != null && odds[p[1]][j+7] && odds[p[1]][j+3]} {if odds[p[1]][j+7] != '0.00'}
+                                {var isHideHDP = (isHomeFav || odds[p[1]][j+3] =='0') && !isEuroOddsType;}
+                                <span class="odds-otherInfo">
+                                    <span class="handicap {if isHideHDP} hidden{/if}" id="${odds[p[1]][j+2]}" hdp="${odds[p[1]][j+3]}">{if isEuroOddsType}${odds[p[1]][j+3]}{else}${odds[p[1]][j+3].replace("-","")}{/if}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-ghdp-odds"> {if odds[p[1]] != null && odds[p[1]][j+7] && odds[p[1]][j+3]}
+                                <div class="OddsWrapper"> {if odds[p[1]][j+7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else} {var isHideHDP = (isHomeFav
+                                    || odds[p[1]][j+3] =='0') && !isEuroOddsType;}
+                                    <span class="odds net {if odds[p[1]][j+7] < 0} negOdds{/if}{if isHideHDP} singleVal{/if}"
+                                        title="${event.i[1]}">
+                                        <span class="ouHdp {if isHideHDP} hidden{/if}" id="${odds[p[1]][j+2]}" hdp="${odds[p[1]][j+3]}">{if isEuroOddsType}${odds[p[1]][j+3]}{else}${odds[p[1]][j+3].replace("-","")}{/if}</span>
+                                        <span class="netOdds" id="${odds[p[1]][j+6]}">${odds[p[1]][j+7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                            <td class="td-odds-blank"></td>
+                            <td class="td-odds-gOu"> {if odds[p[2]] != null && odds[p[2]][j+7] && odds[p[2]][j+3]} {if odds[p[2]][j+7] != '0.00'}
+                                <span class="odds-otherInfo">
+                                    <span class="ou" ou="U">${l.su}</span>
+                                    <span class="handicap" id="${odds[p[2]][j+2]}" hdp="${odds[p[2]][j+3]}">${odds[p[2]][j+3]}</span>
+                                </span> {/if} {/if} </td>
+                            <td class="td-odds-gOu-odds"> {if odds[p[2]] != null && odds[p[2]][j+7] && odds[p[2]][j+3]}
+                                <div class="OddsWrapper"> {if odds[p[2]][j+7] == '0.00'} ${oddsUtil.getLockIcon(true)} {else}
+                                    <span class="odds net {if odds[p[2]][j+7] < 0} negOdds{/if}"
+                                        title="小">
+                                        <span class="ouHdp">
+                                            <span class="ou" ou="U">${l.su}</span>
+                                            <span class="handicap" id="${odds[p[2]][j+2]}" hdp="${odds[p[2]][j+3]}">${odds[p[2]][j+3]}</span>
+                                        </span>
+                                        <span class="netOdds" id="${odds[p[2]][j+6]}">${odds[p[2]][j+7]}</span>
+                                    </span> {/if} </div> {/if} </td>
+                        </tr>
+                    </tbody> {/if} {/for} {/if} {/if} {/if} {/if} {/for} {/if} {if ids}
+                    <tbody class="sum" id="sb${event.k}">
+                        <tr>
+                            <td class="td-score" colspan="7"> {if ps && et > 0} {var cp = Math.min(+et,+(sb.cp[1]));} {if k != 3 && cp > 0} {var cp = cp -1;}
+                                {/if} {var scoreAry = _.range(1,cp+1);} {for i in scoreAry} {var scoreId = 's'+ i + '-' +
+                                event.k;}
+                                <span class="score {if k == 3 && sb.cp == 's'+i} totalOrange{/if} {if oddsUtil.HideSetScore(sb.cp, i ,k)} hidden{/if}"
+                                    id="${scoreId}">${oddsUtil.GetSetScore(ps, 's'+i)}</span> {/for} {/if} </td>
+                            <td class="td-total" colspan="4">
+                                <span class="totalGame">{if k == 3}${l.SB_TotalGames}{else}${l.SB_TotalPoints}{/if}</span>
+                                <span class="totalScore totalOrange"
+                                    id="total${event.k}">${oddsUtil.GetTotal(ps, k, false)}</span>
+                                <span class="totalOrange" id="sum${event.k}">${oddsUtil.GetTotal(ps, k, true)}</span>
+                            </td>
+                        </tr>
+                    </tbody> {/if} </table>
+            </div> {/if} {/for} </div>
+    </div> {/for} </div>

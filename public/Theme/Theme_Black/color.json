@@ -1,0 +1,20 @@
+{  
+   "titleClr":"#ffffff",
+   "AwayClr":"#ff9201",
+   "HomeClr":"#ffffff",
+   "GrayClr":"#323232",
+   "White":"#ffffff",
+   "Black":"#000000",
+   "eventNameClr":"#ffffff",
+   "eventTeamClr":"#dcbc4c",
+   "eventPlayerClr":"#ffffff",
+   "eventPlayerOutClr":"#b8b3ad",
+   "ScoreClr":"#ffffff",
+   "PeriodNameClr":"#dcbc4c",
+   "Red":"#ff0000",
+   "MiddlePanelBorderClr":"#ff903c",
+   "Yellow":"#ff903c",
+   "GoalScoreClr":"#ff9201",
+   "WhiteCircleFlowClr":"#ffffff",
+   "RedCirCleFlowClr":"#ff0000"
+}
