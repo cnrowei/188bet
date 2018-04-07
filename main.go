@@ -15,6 +15,7 @@ import (
 
 func main() {
 	router := gin.Default()
+
 	router.Static("/public", "./public")
 	router.Static("/Public", "./public")
 	router.Static("/testjson", "./testjson")
@@ -29,17 +30,35 @@ func main() {
 		})
 	})
 
-	router.GET("/zh-cn/sports/all/in-play", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "in-play.html", gin.H{
+	router.GET("/zh-cn/sports/:id/:name", func(c *gin.Context) {
+		id := c.Param("id")
+		name := c.Param("name")
+
+		templates := "sports-name.html"
+
+		if strings.EqualFold(id, "all") {
+			templates = "in-play.html"
+		} else if strings.EqualFold(id, "football") {
+			templates = "full-time-asian-handicap-and-over-under.html"
+		}
+
+		c.HTML(http.StatusOK, templates, gin.H{
 			"title": "千年古泉-碧泉潭",
 		})
+		c.String(http.StatusOK, "Hello %s %s", id, name)
 	})
 
-	router.GET("/zh-cn/sports/football/matches-by-date/today/full-time-asian-handicap-and-over-under", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "full-time-asian-handicap-and-over-under.html", gin.H{
-			"title": "千年古泉-碧泉潭",
-		})
-	})
+	// router.GET("/zh-cn/sports/all/in-play", func(c *gin.Context) {
+	// 	c.HTML(http.StatusOK, "in-play.html", gin.H{
+	// 		"title": "千年古泉-碧泉潭",
+	// 	})
+	// })
+
+	// router.GET("/zh-cn/sports/football/matches-by-date/today/full-time-asian-handicap-and-over-under", func(c *gin.Context) {
+	// 	c.HTML(http.StatusOK, "full-time-asian-handicap-and-over-under.html", gin.H{
+	// 		"title": "千年古泉-碧泉潭",
+	// 	})
+	// })
 
 	/*
 	   	router.POST("/form_post", func(c *gin.Context) {
@@ -82,6 +101,8 @@ func main() {
 
 		} else if strings.EqualFold(reqUrl, "/zh-cn/sports/football/matches-by-date/today/full-time-asian-handicap-and-over-under") {
 			xxxjson = readFile1("testjson/GetData3.json")
+		} else {
+			xxxjson = readFile1("testjson/GetData4.json")
 		}
 
 		//jsonTostruct(xxxjson)
@@ -94,6 +115,14 @@ func main() {
 			"pvdr":   "p",
 			"strmId": 0,
 			"isBgs":  true,
+		})
+	})
+
+	//盘口
+	//zh-cn/Service/OddsService?UpdateOddsType&ts=1521468957917&OddsType=1&IsFirstLoad=true&_=1521467876360
+	router.GET("/zh-cn/Service/OddsService", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"suc": "true",
 		})
 	})
 
